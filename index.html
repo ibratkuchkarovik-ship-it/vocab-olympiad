@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pizza Academy Vocabulary Olympiad</title>
+
+<style>
+:root{
+  --blue:#0757c8;
+  --blue2:#0b6ff0;
+  --deep:#063f8f;
+  --yellow:#ffd23f;
+  --green:#18b875;
+  --red:#ef4444;
+  --ink:#122033;
+  --muted:#667085;
+  --soft:#f4f7fb;
+  --card:#ffffff;
+  --line:#e7edf6;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Inter, Arial, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(11,111,240,.16), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(255,210,63,.16), transparent 28%),
+    linear-gradient(135deg,#f7faff,#eef4ff);
+  color:var(--ink);
+}
+.app{width:100%;max-width:1180px;margin:0 auto;padding:28px 18px}
+.logo{
+  width:86px;height:86px;object-fit:contain;display:block;margin:0 auto 20px;
+  background:white;border-radius:24px;padding:12px;box-shadow:0 16px 45px rgba(7,87,200,.14)
+}
+.card{
+  background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.9);
+  border-radius:34px;box-shadow:0 24px 70px rgba(25,60,120,.16);
+  padding:30px;backdrop-filter:blur(14px)
+}
+.hidden{display:none!important}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:38px;letter-spacing:-1.2px;line-height:1;margin-bottom:12px}
+h2{font-size:30px;letter-spacing:-.7px}
+p{color:var(--muted);line-height:1.55}
+input{
+  width:100%;border:1.8px solid var(--line);background:#f9fbff;
+  padding:17px 18px;border-radius:18px;font-size:16px;outline:none;margin-bottom:12px
+}
+input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(7,87,200,.10);background:white}
+button{
+  border:0;border-radius:19px;padding:17px 20px;font-size:16px;
+  font-weight:850;cursor:pointer;transition:.2s ease
+}
+button:hover{transform:translateY(-1px)}
+button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-primary{
+  background:linear-gradient(135deg,var(--blue),var(--blue2));
+  color:white;box-shadow:0 12px 28px rgba(7,87,200,.26);width:100%
+}
+.btn-soft{background:#eef4ff;color:var(--deep);width:100%}
+.btn-green{background:linear-gradient(135deg,#12a86a,#1bd483);color:white;width:100%}
+.btn-red{background:#fff1f1;color:var(--red);width:100%}
+.loginWrap{max-width:490px;margin:0 auto}
+.smallLink{text-align:center;margin-top:14px;color:var(--deep);font-weight:800;cursor:pointer}
+.msg{margin-top:14px;font-weight:750;text-align:center}
+.dashboard{display:grid;grid-template-columns:1fr 1.15fr;gap:24px;align-items:stretch}
+.heroPanel{
+  background:linear-gradient(145deg,#0757c8,#0d7cff);color:white;border-radius:34px;
+  padding:30px;position:relative;overflow:hidden;box-shadow:0 24px 60px rgba(7,87,200,.25)
+}
+.heroPanel:before{
+  content:"";position:absolute;width:260px;height:260px;border-radius:50%;
+  background:rgba(255,255,255,.12);right:-90px;top:-80px
+}
+.heroPanel h2,.heroPanel p{position:relative}
+.heroPanel p{color:rgba(255,255,255,.82)}
+.progressWrap{position:relative;margin:26px 0 18px}
+.progressTop{display:flex;justify-content:space-between;font-weight:850;margin-bottom:8px}
+.progressBar{height:14px;background:rgba(255,255,255,.32);border-radius:999px;overflow:hidden}
+.progressFill{height:100%;width:0%;background:linear-gradient(90deg,var(--yellow),#fff1a6);border-radius:999px;transition:.8s ease}
+.statGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.statBox{background:#f7faff;border:1px solid var(--line);border-radius:24px;padding:18px;min-height:96px}
+.statBox b{display:block;font-size:28px;color:var(--deep);margin-bottom:5px}
+.statBox span{color:var(--muted);font-weight:750}
+.gameShell{max-width:760px;margin:0 auto}
+.gameTop{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{
+  background:#edf4ff;color:var(--deep);padding:9px 13px;border-radius:999px;
+  font-size:13px;font-weight:900;text-transform:uppercase
+}
+.timer{
+  font-size:26px;font-weight:950;color:var(--deep);background:#f3f7ff;
+  padding:10px 16px;border-radius:18px
+}
+.timer.warn{color:#f59e0b}
+.timer.danger{color:var(--red);animation:pulse .75s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.imageBox{
+  height:310px;background:linear-gradient(135deg,#f8fbff,#eef4ff);
+  border:1px solid var(--line);border-radius:30px;display:flex;
+  align-items:center;justify-content:center;overflow:hidden;margin-bottom:18px
+}
+.imageBox img{max-width:100%;max-height:100%;object-fit:contain}
+.slots,.letters{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.slot,.letter{
+  width:46px;height:46px;border-radius:15px;display:flex;align-items:center;
+  justify-content:center;font-size:21px;font-weight:950;user-select:none
+}
+.slot{background:#f5f8ff;border:2px dashed #c4d2e8;color:var(--deep);cursor:pointer}
+.letter{
+  background:linear-gradient(135deg,var(--blue),var(--blue2));color:white;
+  box-shadow:0 7px 0 #06449b;cursor:pointer;transition:.15s ease
+}
+.letter:hover{transform:translateY(-2px)}
+.letter.used{opacity:.22;pointer-events:none;transform:scale(.94)}
+.feedback{
+  min-height:64px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:950;text-align:center;border-radius:22px;
+  margin:16px 0;background:#f7faff
+}
+.feedback.good{color:var(--green);background:#ecfdf5;animation:pop .35s ease}
+.feedback.bad{color:var(--red);background:#fff1f2;animation:shake .35s ease}
+@keyframes pop{0%{transform:scale(.94)}70%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.resultTitle{text-align:center;font-size:36px}
+.adminGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px}
+.adminStat{background:#f7faff;border:1px solid var(--line);border-radius:20px;padding:15px}
+.adminStat b{display:block;color:var(--deep);font-size:25px}
+.tableWrap{overflow:auto;border:1px solid var(--line);border-radius:22px}
+table{width:100%;border-collapse:collapse;min-width:900px;background:white}
+th,td{padding:13px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}
+th{color:var(--muted);font-size:12px;text-transform:uppercase;background:#f7faff}
+.rank{font-weight:950;color:var(--deep)}
+.loadingOverlay{
+  position:fixed;inset:0;background:rgba(255,255,255,.72);display:flex;
+  align-items:center;justify-content:center;z-index:50;backdrop-filter:blur(6px)
+}
+.loader{
+  width:58px;height:58px;border:6px solid #d9e7ff;border-top-color:var(--blue);
+  border-radius:50%;animation:spin .8s linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:850px){
+  .dashboard{grid-template-columns:1fr}.adminGrid{grid-template-columns:repeat(2,1fr)}
+  .imageBox{height:250px}h1{font-size:32px}
+}
+@media(max-width:480px){
+  .app{padding:18px 12px}.card{padding:22px;border-radius:26px}
+  .heroPanel{padding:24px;border-radius:26px}.slot,.letter{width:39px;height:39px;font-size:18px}
+  .gameTop{align-items:flex-start;flex-direction:column}.timer{width:100%;text-align:center}
+  .actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<div id="loading" class="loadingOverlay hidden"><div class="loader"></div></div>
+
+<div class="app">
+  <img src="LOGO.jpg" class="logo" onerror="this.style.display='none'">
+
+  <section id="loginView" class="loginWrap card">
+    <h1>Vocabulary Olympiad</h1>
+    <p>Enter your full name and phone number to access your personal vocabulary cabinet.</p>
+    <input id="fullName" placeholder="Full name">
+    <input id="phone" placeholder="Phone number / last 7 digits">
+    <button class="btn-primary" onclick="login()">Enter Olympiad</button>
+    <div class="smallLink" onclick="showAdminLogin()">Admin panel</div>
+    <div id="loginMsg" class="msg"></div>
+  </section>
+
+  <section id="studentView" class="dashboard hidden">
+    <div class="heroPanel">
+      <h2 id="studentName">Student</h2>
+      <p id="studentBranch">Branch</p>
+      <div class="progressWrap">
+        <div class="progressTop">
+          <span>Vocabulary progress</span>
+          <span id="progressText">0 / 1000</span>
+        </div>
+        <div class="progressBar"><div id="progressFill" class="progressFill"></div></div>
+      </div>
+      <button class="btn-primary" style="background:white;color:var(--deep);margin-top:18px" onclick="startSession()">Start 10-word session</button>
+    </div>
+
+    <div class="card">
+      <h2>Your Stats</h2>
+      <div class="statGrid">
+        <div class="statBox"><b id="statConquered">0</b><span>Conquered</span></div>
+        <div class="statBox"><b id="statRank">-</b><span>Rank</span></div>
+        <div class="statBox"><b id="statSessions">0</b><span>Sessions</span></div>
+        <div class="statBox"><b id="statAccuracy">0%</b><span>Accuracy</span></div>
+        <div class="statBox"><b id="statCurrentStreak">0</b><span>Current streak</span></div>
+        <div class="statBox"><b id="statBestStreak">0</b><span>Best streak</span></div>
+      </div>
+      <button class="btn-soft" style="margin-top:18px" onclick="logout()">Logout</button>
+    </div>
+  </section>
+
+  <section id="gameView" class="gameShell card hidden">
+    <div class="gameTop">
+      <div class="badges">
+        <span id="questionBadge" class="badge">1 / 10</span>
+        <span id="categoryBadge" class="badge">Category</span>
+        <span id="difficultyBadge" class="badge">Difficulty</span>
+      </div>
+      <div id="timer" class="timer">03:00</div>
+    </div>
+
+    <div class="imageBox">
+      <img id="wordImage">
+    </div>
+
+    <div id="slots" class="slots"></div>
+    <div id="letters" class="letters"></div>
+
+    <div id="feedback" class="feedback">Arrange the letters to make the word.</div>
+
+    <div class="actions">
+      <button id="checkBtn" class="btn-primary" onclick="checkCurrentAnswer()">Check answer</button>
+      <button id="nextBtn" class="btn-green hidden" onclick="nextQuestion()">Next question</button>
+      <button id="clearBtn" class="btn-soft" onclick="clearAnswer()">Clear</button>
+      <button class="btn-red" onclick="finishSession(true)">Finish session</button>
+    </div>
+  </section>
+
+  <section id="resultView" class="card hidden" style="max-width:720px;margin:0 auto;">
+    <h2 class="resultTitle">Session Complete</h2>
+    <div class="statGrid">
+      <div class="statBox"><b id="resultScore">0</b><span>Correct</span></div>
+      <div class="statBox"><b id="resultWrong">0</b><span>Wrong / Unanswered</span></div>
+      <div class="statBox"><b id="resultAccuracy">0%</b><span>Accuracy</span></div>
+      <div class="statBox"><b id="resultConquered">0</b><span>Total conquered</span></div>
+    </div>
+    <div class="actions" style="margin-top:18px">
+      <button class="btn-primary" onclick="startSession()">New session</button>
+      <button class="btn-soft" onclick="renderStudent()">Back to cabinet</button>
+    </div>
+  </section>
+
+  <section id="adminLoginView" class="loginWrap card hidden">
+    <h1>Admin Panel</h1>
+    <p>Enter admin login and PIN.</p>
+    <input id="adminUser" placeholder="Admin login">
+    <input id="adminPin" placeholder="PIN">
+    <button class="btn-primary" onclick="loadDashboard()">Open dashboard</button>
+    <div class="smallLink" onclick="showLogin()">Back to login</div>
+    <div id="adminMsg" class="msg"></div>
+  </section>
+
+  <section id="adminView" class="card hidden">
+    <h2>Admin Dashboard</h2>
+    <div class="adminGrid">
+      <div class="adminStat"><b id="dashStudents">0</b><span>Students</span></div>
+      <div class="adminStat"><b id="dashSessions">0</b><span>Sessions</span></div>
+      <div class="adminStat"><b id="dashAttempts">0</b><span>Attempts</span></div>
+      <div class="adminStat"><b id="dashConquered">0</b><span>Conquered</span></div>
+      <div class="adminStat"><b id="dashAccuracy">0%</b><span>Avg accuracy</span></div>
+    </div>
+
+    <h3>Branch Stats</h3>
+    <div id="branchStats" class="tableWrap"></div>
+
+    <h3 style="margin-top:24px">Leaderboard</h3>
+    <div id="leaderboard" class="tableWrap"></div>
+
+    <button class="btn-soft" style="margin-top:18px" onclick="showLogin()">Logout admin</button>
+  </section>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkLdvQ0Batptu3ec31OqCq1BBHaWqmS3jFCFWvdUby37LYGSDs6WOa3RXbbAoIUhvJ/exec";
+
+let currentStudent = null;
+let currentSessionId = null;
+let questions = [];
+let currentIndex = 0;
+let selectedLetters = [];
+let answers = [];
+let checked = false;
+let timerInterval = null;
+let timeLeft = 180;
+let startedAt = null;
+
+function showLoading(on){
+  document.getElementById("loading").classList.toggle("hidden", !on);
+}
+function view(id){
+  document.querySelectorAll("section").forEach(s => s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+async function api(action,payload){
+  const res = await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({action,payload})});
+  return await res.json();
+}
+function safeNumber(v){
+  const n = Number(v);
+  if(!Number.isFinite(n) || Math.abs(n) > 100000) return 0;
+  return n;
+}
+function showLogin(){ view("loginView"); }
+function showAdminLogin(){ view("adminLoginView"); }
+
+async function login(){
+  const fullName = document.getElementById("fullName").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const msg = document.getElementById("loginMsg");
+  msg.textContent = "";
+  showLoading(true);
+  try{
+    const data = await api("login",{fullName,phone});
+    if(!data.ok){ msg.textContent = data.message || "Login failed."; return; }
+    if(data.role === "admin"){ view("adminLoginView"); return; }
+    currentStudent = data.student;
+    localStorage.setItem("vocabStudent", JSON.stringify(currentStudent));
+    renderStudent();
+  }catch(err){
+    msg.textContent = "Connection error. Check Apps Script URL.";
+  }finally{ showLoading(false); }
+}
+
+function renderStudent(){
+  if(!currentStudent) return showLogin();
+  document.getElementById("studentName").textContent = currentStudent.fullName || "Student";
+  document.getElementById("studentBranch").textContent = currentStudent.branch || "";
+  const conquered = safeNumber(currentStudent.conqueredCount);
+  const totalWords = safeNumber(currentStudent.totalWords) || 1000;
+  const percent = Math.min(100, Math.round((conquered / totalWords) * 100));
+  document.getElementById("progressText").textContent = `${conquered} / ${totalWords}`;
+  document.getElementById("progressFill").style.width = percent + "%";
+  document.getElementById("statConquered").textContent = conquered;
+  document.getElementById("statRank").textContent = currentStudent.rank ? "#" + currentStudent.rank : "-";
+  document.getElementById("statSessions").textContent = safeNumber(currentStudent.totalSessions);
+  document.getElementById("statAccuracy").textContent = safeNumber(currentStudent.accuracy) + "%";
+  document.getElementById("statCurrentStreak").textContent = safeNumber(currentStudent.currentStreak);
+  document.getElementById("statBestStreak").textContent = safeNumber(currentStudent.bestStreak);
+  view("studentView");
+}
+
+function logout(){
+  localStorage.removeItem("vocabStudent");
+  currentStudent = null;
+  showLogin();
+}
+
+async function refreshStudentStats(){
+  if(!currentStudent) return;
+  const data = await api("getStudentStats",{studentId:currentStudent.studentId});
+  if(data.ok){
+    currentStudent = data.student;
+    localStorage.setItem("vocabStudent", JSON.stringify(currentStudent));
+  }
+}
+
+async function startSession(){
+  showLoading(true);
+  try{
+    const data = await api("startSession",{studentId:currentStudent.studentId});
+    if(!data.ok){ alert(data.message || "Could not start session."); return; }
+    currentSessionId = data.sessionId;
+    questions = data.questions || [];
+    currentIndex = 0;
+    answers = [];
+    checked = false;
+    timeLeft = 180;
+    startedAt = Date.now();
+
+    questions.forEach(q => {
+      const img = new Image();
+      img.src = `images/${q.id}.png`;
+    });
+
+    view("gameView");
+    renderQuestion();
+    startTimer();
+  }catch(err){
+    alert("Could not connect to server.");
+  }finally{ showLoading(false); }
+}
+
+function renderQuestion(){
+  const q = questions[currentIndex];
+  selectedLetters = [];
+  checked = false;
+  document.getElementById("questionBadge").textContent = `${currentIndex + 1} / ${questions.length}`;
+  document.getElementById("categoryBadge").textContent = q.category || "category";
+  document.getElementById("difficultyBadge").textContent = q.difficulty || "difficulty";
+
+  const img = document.getElementById("wordImage");
+  img.onerror = function(){ this.src = "fallback.png"; };
+  img.src = `images/${q.id}.png`;
+
+  const feedback = document.getElementById("feedback");
+  feedback.textContent = "Arrange the letters to make the word.";
+  feedback.className = "feedback";
+  document.getElementById("checkBtn").disabled = false;
+  document.getElementById("clearBtn").disabled = false;
+  document.getElementById("nextBtn").classList.add("hidden");
+
+  const slots = document.getElementById("slots");
+  const letters = document.getElementById("letters");
+  slots.innerHTML = "";
+  letters.innerHTML = "";
+
+  for(let i=0;i<q.length;i++){
+    const s = document.createElement("div");
+    s.className = "slot";
+    s.onclick = () => !checked && removeLetter(i);
+    slots.appendChild(s);
+  }
+
+  q.letters.forEach((letter,index)=>{
+    const el = document.createElement("div");
+    el.className = "letter";
+    el.textContent = String(letter).toUpperCase();
+    el.onclick = () => !checked && pickLetter(letter,index,el);
+    letters.appendChild(el);
+  });
+}
+
+function pickLetter(letter,index,el){
+  const q = questions[currentIndex];
+  if(selectedLetters.length >= q.length) return;
+  selectedLetters.push({letter,index,el});
+  el.classList.add("used");
+  updateSlots();
+}
+function removeLetter(slotIndex){
+  const removed = selectedLetters.splice(slotIndex,1)[0];
+  if(removed) removed.el.classList.remove("used");
+  updateSlots();
+}
+function updateSlots(){
+  const slotEls = document.querySelectorAll(".slot");
+  slotEls.forEach((slot,i)=>{
+    slot.textContent = selectedLetters[i] ? String(selectedLetters[i].letter).toUpperCase() : "";
+  });
+}
+function clearAnswer(){
+  selectedLetters.forEach(x => x.el.classList.remove("used"));
+  selectedLetters = [];
+  updateSlots();
+}
+
+async function checkCurrentAnswer(){
+  const q = questions[currentIndex];
+  const answer = selectedLetters.map(x => x.letter).join("");
+  if(answer.length < q.length){
+    const f = document.getElementById("feedback");
+    f.textContent = "Complete the word first.";
+    f.className = "feedback bad";
+    return;
+  }
+  try{
+    const data = await api("checkAnswer",{wordId:q.id,answer});
+    if(!data.ok){ alert(data.message || "Could not check answer."); return; }
+    checked = true;
+    answers.push({wordId:q.id, answer});
+    const f = document.getElementById("feedback");
+    if(data.correct){
+      f.textContent = "Correct! Great job.";
+      f.className = "feedback good";
+    }else{
+      f.textContent = "Incorrect. This word will return later.";
+      f.className = "feedback bad";
+    }
+    document.getElementById("checkBtn").disabled = true;
+    document.getElementById("clearBtn").disabled = true;
+    document.getElementById("nextBtn").classList.remove("hidden");
+  }catch(err){
+    alert("Connection error while checking answer.");
+  }
+}
+
+function nextQuestion(){
+  currentIndex++;
+  if(currentIndex >= questions.length) finishSession(false);
+  else renderQuestion();
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+  updateTimer();
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    updateTimer();
+    if(timeLeft <= 0) finishSession(false);
+  },1000);
+}
+function updateTimer(){
+  const timer = document.getElementById("timer");
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  timer.textContent = `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  timer.className = "timer";
+  if(timeLeft <= 60) timer.classList.add("danger");
+  else if(timeLeft <= 120) timer.classList.add("warn");
+}
+
+async function finishSession(manual){
+  clearInterval(timerInterval);
+  const answered = new Set(answers.map(a => a.wordId));
+  questions.forEach(q=>{ if(!answered.has(q.id)) answers.push({wordId:q.id, answer:""}); });
+  const durationSeconds = Math.floor((Date.now() - startedAt) / 1000);
+  showLoading(true);
+  try{
+    const data = await api("submitSession",{
+      sessionId:currentSessionId,
+      studentId:currentStudent.studentId,
+      answers,
+      durationSeconds
+    });
+    if(!data.ok){ alert(data.message || "Could not submit session."); return; }
+    currentStudent = data.result.student;
+    localStorage.setItem("vocabStudent", JSON.stringify(currentStudent));
+    document.getElementById("resultScore").textContent = data.result.score;
+    document.getElementById("resultWrong").textContent = data.result.wrong + data.result.unanswered;
+    document.getElementById("resultAccuracy").textContent = data.result.accuracy + "%";
+    document.getElementById("resultConquered").textContent = currentStudent.conqueredCount;
+    view("resultView");
+  }catch(err){
+    alert("Session submission failed. Check connection.");
+  }finally{ showLoading(false); }
+}
+
+async function loadDashboard(){
+  const username = document.getElementById("adminUser").value.trim();
+  const pin = document.getElementById("adminPin").value.trim();
+  const msg = document.getElementById("adminMsg");
+  msg.textContent = "";
+  showLoading(true);
+  try{
+    const data = await api("getDashboard",{username,pin});
+    if(!data.ok){ msg.textContent = data.message || "Admin login failed."; return; }
+    document.getElementById("dashStudents").textContent = data.stats.totalStudents || 0;
+    document.getElementById("dashSessions").textContent = data.stats.totalSessions || 0;
+    document.getElementById("dashAttempts").textContent = data.stats.totalAttempts || 0;
+    document.getElementById("dashConquered").textContent = data.stats.totalConquered || 0;
+    document.getElementById("dashAccuracy").textContent = (data.stats.avgAccuracy || 0) + "%";
+    renderBranchStats(data.branchStats || []);
+    renderLeaderboard(data.leaderboard || []);
+    view("adminView");
+  }catch(err){
+    msg.textContent = "Connection error.";
+  }finally{ showLoading(false); }
+}
+
+function renderBranchStats(rows){
+  let html = `<table><tr><th>Branch</th><th>Students</th><th>Sessions</th><th>Attempts</th><th>Conquered</th><th>Accuracy</th></tr>`;
+  rows.forEach(r=>{
+    html += `<tr><td>${r.branch}</td><td>${r.students}</td><td>${r.sessions}</td><td>${r.attempts}</td><td>${r.conquered}</td><td>${r.accuracy}%</td></tr>`;
+  });
+  html += `</table>`;
+  document.getElementById("branchStats").innerHTML = html;
+}
+function renderLeaderboard(rows){
+  let html = `<table><tr><th>#</th><th>Name</th><th>Branch</th><th>Conq.</th><th>Sessions</th><th>Attempts</th><th>Correct</th><th>Wrong</th><th>Accuracy</th><th>Current</th><th>Best</th></tr>`;
+  rows.forEach(r=>{
+    html += `<tr><td class="rank">${r.rank}</td><td>${r.fullName}</td><td>${r.branch}</td><td>${r.conqueredCount}</td><td>${r.totalSessions}</td><td>${r.totalAttempts}</td><td>${r.totalCorrect}</td><td>${r.totalWrong}</td><td>${r.accuracy}%</td><td>${r.currentStreak}</td><td>${r.bestStreak}</td></tr>`;
+  });
+  html += `</table>`;
+  document.getElementById("leaderboard").innerHTML = html;
+}
+
+window.onload = async () => {
+  const saved = localStorage.getItem("vocabStudent");
+  if(saved){
+    currentStudent = JSON.parse(saved);
+    try{ await refreshStudentStats(); }catch(e){}
+    renderStudent();
+  }
+};
+</script>
+</body>
+</html>
